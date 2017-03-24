@@ -191,5 +191,47 @@ namespace BlackJack
 
             return quit;
         }
+
+        public static Card DealCardFaceUp (List<Card> deck, string playerOrDealer)
+        {
+            if (playerOrDealer == "player")
+            {
+                var playerSavedCard = deck.First();
+                Console.WriteLine($"{playerSavedCard} was dealt to you.");
+                return playerSavedCard;
+            }
+            else
+            {
+                var dealerSavedCard = deck.First();
+                Console.WriteLine($"{dealerSavedCard} was dealt to the dealer.");
+                return dealerSavedCard;
+            }
+        }
+
+        public static Card DealCardFaceDown (List<Card> deck)
+        {
+            var dealerSavedCard = deck.First();
+            Console.WriteLine("The dealer was dealt one card facedown.");
+            return dealerSavedCard;
+        }
+
+        public static List<Card> ShrinkDeck (List<Card> deckForGame)
+        {
+            deckForGame.RemoveAt(0);
+            var shrunkDeck = deckForGame;
+            return shrunkDeck;
+        }
+
+        public static void DealOpeningHands(List<Card> playerHand, List<Card> dealerHand, List<Card> deckForGame)
+        {
+            playerHand.Add(Logic.DealCardFaceUp(deckForGame, "player"));
+            deckForGame = Logic.ShrinkDeck(deckForGame);
+            dealerHand.Add(Logic.DealCardFaceUp(deckForGame, "dealer"));
+            deckForGame = Logic.ShrinkDeck(deckForGame);
+            playerHand.Add(Logic.DealCardFaceUp(deckForGame, "player"));
+            deckForGame = Logic.ShrinkDeck(deckForGame);
+            dealerHand.Add(Logic.DealCardFaceDown(deckForGame));
+            deckForGame = Logic.ShrinkDeck(deckForGame);
+        }
     }
 }
