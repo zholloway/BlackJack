@@ -233,5 +233,54 @@ namespace BlackJack
             dealerHand.Add(Logic.DealCardFaceDown(deckForGame));
             deckForGame = Logic.ShrinkDeck(deckForGame);
         }
+
+        public static int CheckHandValue(List<Card> hand)
+        {
+            var handValue = 0;
+
+            foreach (var individualCard in hand)
+            {
+                handValue += individualCard.GetCardValue();
+            }
+
+            return handValue;
+        }
+
+        public static string AskPlayerHitOrStay(int playerHandValue)
+        {
+            Console.WriteLine($"You currently have {playerHandValue}. Would you like to 'hit' or 'stay'?");
+            var decision = Console.ReadLine();
+            /*
+            while (decision != "hit" || decision != "stay")
+            {
+                Console.WriteLine("Sorry, please type 'hit' or 'stay' as your choice.");
+                decision = Console.ReadLine();
+            }
+            */
+
+            Console.WriteLine($"You have chosen to {decision}.");
+        
+            return decision;
+        }
+
+        public static bool CheckForBlackjack(string playerOrDealer, int handValue)
+        {
+            var blackjackStatus = false;
+
+            if (handValue == 21 && playerOrDealer == "player")
+            {
+                Console.WriteLine("You have 21! Congratulations!");
+                blackjackStatus = true;
+                return blackjackStatus;
+            }
+            else if (handValue == 21 && playerOrDealer == "dealer")
+            {
+                Console.WriteLine("The dealer has 21. You lose.");
+                blackjackStatus = true;
+                return blackjackStatus;
+            }
+
+            return blackjackStatus;
+        }
     }
 }
