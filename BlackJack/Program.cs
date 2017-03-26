@@ -66,6 +66,7 @@ namespace BlackJack
                     while (playerDecision == "hit" && playerBust == false && playerBlackjackStatus == false)
                     {
                         playerHand.Add(Logic.DealCardFaceUp(deckForGame, "player"));
+                        deckForGame = Logic.ShrinkDeck(deckForGame);
                         playerHandValue = Logic.CheckHandValue(playerHand);
 
                         if (playerHandValue < 21)
@@ -86,12 +87,15 @@ namespace BlackJack
                     }
 
                     //run computerDeterminehitorstay logic
-                    if (dealerHandValue < 16 && playerBust == false && playerBlackjackStatus == false)
+
+                    //dealer hit
+                    if (dealerHandValue < 17 && playerBust == false && playerBlackjackStatus == false)
                     {
                         Console.WriteLine($"Dealer reveals {dealerHand[1]}. Dealer showing {dealerHand[0]} and {dealerHand[1]}.");
-                        while (dealerHandValue < 16 && dealerHandValue < playerHandValue)
+                        while (dealerHandValue < 17 && dealerHandValue < playerHandValue)
                         {
                             dealerHand.Add(Logic.DealCardFaceUp(deckForGame, "dealer"));
+                            deckForGame = Logic.ShrinkDeck(deckForGame);
                             dealerHandValue = Logic.CheckHandValue(dealerHand);
                         }
 
@@ -105,7 +109,7 @@ namespace BlackJack
                             Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You lose.");
                             playerWinHand = false;
                         }
-                        else if (dealerHandValue < 21 && dealerHandValue < playerHandValue)
+                        else if (dealerHandValue < 22 && dealerHandValue < playerHandValue)
                         {
                             Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You win!");
                             playerWinHand = true;
@@ -116,11 +120,18 @@ namespace BlackJack
                             playerWinHand = false;
                         }
                     }
-                    else if (dealerHandValue >= 16 && dealerHandValue > playerHandValue && playerBust == false && playerBlackjackStatus == false)
+                    //dealer stay
+                    else if (dealerHandValue >= 17 && dealerHandValue >= playerHandValue && playerBust == false && playerBlackjackStatus == false)
                     {
                         Console.WriteLine($"Dealer reveals {dealerHand[1]}. Dealer showing {dealerHand[0]} and {dealerHand[1]}.");
                         Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You lose.");
                         playerWinHand = false;
+                    }
+                    else if (dealerHandValue >= 17 && dealerHandValue < playerHandValue && playerBust == false && playerBlackjackStatus == false)
+                    {
+                        Console.WriteLine($"Dealer reveals {dealerHand[1]}. Dealer showing {dealerHand[0]} and {dealerHand[1]}.");
+                        Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You win!");
+                        playerWinHand = true;
                     }
 
                     //adjust moneyAmount based on win or lose
@@ -144,6 +155,7 @@ namespace BlackJack
                         playerHand.Clear();
                         dealerHand.Clear();
                         gameComplete = Logic.WouldYouLikeToQuit();
+                        Console.WriteLine("----");
                     }
 
                 }
