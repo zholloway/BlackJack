@@ -143,7 +143,7 @@ namespace BlackJack
                         }
                     }
                     //dealer stay
-                    else if (dealerHandValue >= 17 && dealerHandValue >= playerHandValue && playerBust == false && playerBlackjackStatus == false)
+                    else if (dealerHandValue >= 17 && dealerHandValue > playerHandValue && playerBust == false && playerBlackjackStatus == false)
                     {
                         Console.WriteLine($"Dealer reveals {dealerHand[1]}. Dealer showing {dealerHand[0]} and {dealerHand[1]}.");
                         Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You lose.");
@@ -156,7 +156,7 @@ namespace BlackJack
                         playerWinHand = true;
                     }
                 }
-                
+
                 //adjust moneyAmount based on player win or lose
                 if (dealerHandValue == 21 && playerHandValue == 21)
                 {
