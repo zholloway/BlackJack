@@ -15,27 +15,31 @@ namespace BlackJack
             var moneyAmount = Logic.ParseMoney(Logic.AskForInitialPlayerMoney(), true);
             var playerHand = new List<Card>();
             var dealerHand = new List<Card>();
+            var handCounter = 1;
 
             var gameComplete = false;
 
             while (gameComplete == false)
             {
                 //hand loop
-                
-                //hand counter for changing money message
-                //var handCounter = 1;
-                //report current money amount
+
+                Console.WriteLine("----");
+                Console.WriteLine($"Hand {handCounter}");
+                Console.WriteLine("----");
+
+                //report current money amount and ask for bet
                 Console.Write($"Your current funds are: ${moneyAmount}. ");
-                //how much do you want to bet
-                //change ParseMoney parameters from bool to int
                 var betAmount = Logic.ParseMoney(Logic.AskBetAmount(), false);
+                //make sure bet is possible
                 while (betAmount > moneyAmount)
                 {
                     Console.WriteLine("You don't have that much money.");
                     betAmount = Logic.ParseMoney(Logic.AskBetAmount(), false);
                 }
+
                 //shuffle deck
                 Logic.ShuffleShoe(deckForGame);
+
                 //deal opening hands
                 Logic.DealOpeningHands(playerHand, dealerHand, deckForGame);
 
@@ -86,7 +90,7 @@ namespace BlackJack
                         }
                     }
 
-                    //run computerDeterminehitorstay logic
+                    //run dealerDeterminehitorstay logic
 
                     //dealer hit
                     if (dealerHandValue < 17 && playerBust == false && playerBlackjackStatus == false)
@@ -114,7 +118,7 @@ namespace BlackJack
                             Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You win!");
                             playerWinHand = true;
                         }
-                        else
+                        else if (dealerHandValue == 21 && playerHandValue < 21)
                         {
                             Console.WriteLine("The dealer has 21. You lose.");
                             playerWinHand = false;
@@ -133,34 +137,37 @@ namespace BlackJack
                         Console.WriteLine($"The dealer has {dealerHandValue} and you have {playerHandValue}. You win!");
                         playerWinHand = true;
                     }
+                }
+                
+                //adjust moneyAmount based on player win or lose
+                if (dealerHandValue == 21 && playerHandValue == 21)
+                {
+                    Console.WriteLine($"Push! The dealer has {dealerHandValue} and you have {playerHandValue}. Your bet is returned to you.");
+                }
+                else if (playerWinHand == true)
+                {
+                    moneyAmount += betAmount;
+                }
+                else
+                {
+                    moneyAmount -= betAmount;
+                }
 
-                    //adjust moneyAmount based on win or lose
-                    if (playerWinHand == true)
-                    {
-                        moneyAmount += betAmount;
-                    }
-                    else
-                    {
-                        moneyAmount -= betAmount;
-                    }
-
-                    //check to see if player is out of money. check to see if they want to keep playing
-                    if (moneyAmount == 0)
-                    {
-                        Console.WriteLine("You are out of money! Goodbye.");
-                        gameComplete = true;
-                    }
-                    else
-                    {
-                        playerHand.Clear();
-                        dealerHand.Clear();
-                        gameComplete = Logic.WouldYouLikeToQuit();
-                        Console.WriteLine("----");
-                    }
-
+                //check to see if player is out of money. if not, check to see if they want to keep playing
+                if (moneyAmount == 0)
+                {
+                    Console.WriteLine("You are out of money! Goodbye.");
+                    gameComplete = true;
+                }
+                else
+                {
+                    playerHand.Clear();
+                    dealerHand.Clear();
+                    handCounter++;
+                    gameComplete = Logic.WouldYouLikeToQuit();
                 }
             }
-
+            //inform player of winnings as they leave table
             Console.WriteLine($"Thank you for playing. You are leaving with {moneyAmount:C}.");
             Console.ReadLine();
         }
