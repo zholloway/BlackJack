@@ -73,7 +73,19 @@ namespace BlackJack
                         deckForGame = Logic.ShrinkDeck(deckForGame);
                         playerHandValue = Logic.CheckHandValue(playerHand);
 
-                        if (playerHandValue < 21)
+                        var cardsInHand = 0;
+                        foreach (var card in playerHand)
+                        {
+                            cardsInHand++;
+                        }
+
+                        if (playerHandValue < 21 && cardsInHand == 6)
+                        {
+                            Console.WriteLine("You have 6 cards in hand and are still under 21. You win!");
+                            playerWinHand = true;
+                            playerBlackjackStatus = true;
+                        }
+                        else if (playerHandValue < 21)
                         {
                             playerDecision = Logic.AskPlayerHitOrStay(playerHandValue);
                         }
@@ -168,6 +180,7 @@ namespace BlackJack
                 }
             }
             //inform player of winnings as they leave table
+            Console.WriteLine("----");
             Console.WriteLine($"Thank you for playing. You are leaving with {moneyAmount:C}.");
             Console.ReadLine();
         }
