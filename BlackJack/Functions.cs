@@ -134,14 +134,16 @@ namespace BlackJack
         {
             var deck = new List<Card>();
 
-            foreach (Rank r in Enum.GetValues(typeof(Rank)))
+            for (int i = 0; i < 7; i++)
             {
-                foreach (Suit s in Enum.GetValues(typeof(Suit)))
+                foreach (Rank r in Enum.GetValues(typeof(Rank)))
                 {
-                    deck.Add(new Card(s, r));
+                    foreach (Suit s in Enum.GetValues(typeof(Suit)))
+                    {
+                        deck.Add(new Card(s, r));
+                    }
                 }
             }
-
             return deck;
         }
 
