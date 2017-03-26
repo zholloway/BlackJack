@@ -44,7 +44,7 @@ namespace BlackJack
                 Logic.DealOpeningHands(playerHand, dealerHand, deckForGame);
 
                 //if player or dealer has Blackjack, end game immediately
-                var playerHandValue = Logic.CheckHandValue(playerHand);
+                var playerHandValue = Logic.CheckOpeningHandValueAce(playerHand);
                 var dealerHandValue = Logic.CheckHandValue(dealerHand);
 
                 var playerBlackjackStatus = Logic.CheckForBlackjack("player", playerHandValue);
@@ -66,17 +66,23 @@ namespace BlackJack
                     var playerBust = false;
                     var playerDecision = Logic.AskPlayerHitOrStay(playerHandValue);
 
+                    var cardsInHand = 2;
+
                     //player hit loop
                     while (playerDecision == "hit" && playerBust == false && playerBlackjackStatus == false)
                     {
+                        
                         playerHand.Add(Logic.DealCardFaceUp(deckForGame, "player"));
+                        cardsInHand++;
                         deckForGame = Logic.ShrinkDeck(deckForGame);
-                        playerHandValue = Logic.CheckHandValue(playerHand);
 
-                        var cardsInHand = 0;
-                        foreach (var card in playerHand)
+                        if(playerHand[cardsInHand - 1].GetCardValue() == 11)
                         {
-                            cardsInHand++;
+                            playerHandValue += Logic.AdjustForAceDecision();
+                        }
+                        else
+                        {
+                            playerHandValue += playerHand[cardsInHand - 1].GetCardValue();
                         }
 
                         if (playerHandValue < 21 && cardsInHand == 6)

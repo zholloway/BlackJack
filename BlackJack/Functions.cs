@@ -45,10 +45,11 @@ namespace BlackJack
         public int GetCardValue()
         {
             var rv = 0;
+
             switch (this.Rank)
             {
                 case Rank.Ace:
-                    rv = 11;
+                    rv = 11;                
                     break;
                 case Rank.Deuce:
                     rv = 2;
@@ -122,7 +123,7 @@ namespace BlackJack
             return deck;
         }
 
-        public static string AskForInitialPlayerMoney ()
+        public static string AskForInitialPlayerMoney()
         {
             Console.WriteLine("How much money are you coming to the table with?");
             var money = Console.ReadLine();
@@ -150,14 +151,14 @@ namespace BlackJack
             return randomDeck;
         }
 
-        public static string AskBetAmount ()
+        public static string AskBetAmount()
         {
             Console.WriteLine("How much would you like to bet for this hand?");
             var betAmount = Console.ReadLine();
             return betAmount;
         }
 
-        public static int ParseMoney (string money, bool initialMoney)
+        public static int ParseMoney(string money, bool initialMoney)
         {
             var wasSuccessful = int.TryParse(money, out int parsedMoney);
 
@@ -178,7 +179,7 @@ namespace BlackJack
             return parsedMoney;
         }
 
-        public static bool WouldYouLikeToQuit ()
+        public static bool WouldYouLikeToQuit()
         {
             Console.WriteLine("Would you like to play another hand or leave the table? Please answer 'play' or 'leave'.");
             var decision = Console.ReadLine();
@@ -192,7 +193,7 @@ namespace BlackJack
             return quit;
         }
 
-        public static Card DealCardFaceUp (List<Card> deck, string playerOrDealer)
+        public static Card DealCardFaceUp(List<Card> deck, string playerOrDealer)
         {
             if (playerOrDealer == "player")
             {
@@ -208,14 +209,14 @@ namespace BlackJack
             }
         }
 
-        public static Card DealCardFaceDown (List<Card> deck)
+        public static Card DealCardFaceDown(List<Card> deck)
         {
             var dealerSavedCard = deck.First();
             Console.WriteLine("The dealer was dealt one card facedown.");
             return dealerSavedCard;
         }
 
-        public static List<Card> ShrinkDeck (List<Card> deckForGame)
+        public static List<Card> ShrinkDeck(List<Card> deckForGame)
         {
             deckForGame.RemoveAt(0);
             var shrunkDeck = deckForGame;
@@ -259,7 +260,7 @@ namespace BlackJack
             */
 
             Console.WriteLine($"You have chosen to {decision}.");
-        
+
             return decision;
         }
 
@@ -281,6 +282,43 @@ namespace BlackJack
             }
 
             return blackjackStatus;
+        }
+
+        public static int AdjustForAceDecision()
+        {
+            var parsedDecision = 0;
+
+            Console.WriteLine($"You hit an Ace. Would you like it to be worth '1' or '11'?");
+            var aceDecision = Console.ReadLine();
+            var wasSuccessful = int.TryParse(aceDecision, out parsedDecision);
+
+            while (parsedDecision != 1 && parsedDecision != 11)
+            {
+                Console.WriteLine("Oops, that is not a valid choice. Please try again.");
+                aceDecision = Console.ReadLine();
+                wasSuccessful = int.TryParse(aceDecision, out parsedDecision);
+            }
+
+            return parsedDecision;
+        }
+
+        public static int CheckOpeningHandValueAce (List<Card> playerHand)
+        {
+            var totalValue = 0;
+
+            foreach (var card in playerHand)
+            {
+                if (card.GetCardValue() == 11)
+                {
+                    totalValue += AdjustForAceDecision();
+                }
+                else
+                {
+                    totalValue += card.GetCardValue();
+                }
+            }
+
+            return totalValue;
         }
     }
 }
