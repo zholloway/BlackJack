@@ -11,7 +11,8 @@ namespace BlackJack
         static void Main(string[] args)
         {
             //welcome player
-            var deckForGame = Logic.InitializeBlackJack();
+            Console.WriteLine("Welcome to the BlackJack table. It's you versus the dealer.");
+            var deckForGame = new List<Card>();
             var moneyAmount = Logic.ParseMoney(Logic.AskForInitialPlayerMoney(), true);
             var playerHand = new List<Card>();
             var dealerHand = new List<Card>();
@@ -19,10 +20,9 @@ namespace BlackJack
 
             var gameComplete = false;
 
+            //hand loop
             while (gameComplete == false)
             {
-                //hand loop
-
                 Console.WriteLine("----");
                 Console.WriteLine($"Hand {handCounter}");
                 Console.WriteLine("----");
@@ -37,8 +37,8 @@ namespace BlackJack
                     betAmount = Logic.ParseMoney(Logic.AskBetAmount(), false);
                 }
 
-                //shuffle deck
-                Logic.ShuffleShoe(deckForGame);
+                //shuffle all 7 decks
+                deckForGame = Logic.ShuffleShoe(Logic.CreateDeck());
 
                 //deal opening hands
                 Logic.DealOpeningHands(playerHand, dealerHand, deckForGame);

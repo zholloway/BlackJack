@@ -116,13 +116,6 @@ namespace BlackJack
 
     static class Logic
     {
-        public static List<Card> InitializeBlackJack()
-        {
-            Console.WriteLine("Welcome to the BlackJack table. It's you versus the dealer.");
-            var deck = ShuffleShoe(CreateDeck());
-            return deck;
-        }
-
         public static string AskForInitialPlayerMoney()
         {
             Console.WriteLine("How much money are you coming to the table with?");
